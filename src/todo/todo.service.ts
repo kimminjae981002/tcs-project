@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Todo } from './todo.entity';
 import { Repository } from 'typeorm';
@@ -12,31 +12,54 @@ export class TodoService {
     private todoRepository: Repository<Todo>,
   ) {}
 
-  // Todo 항목 생성
-  async create(createTodoDto: CreateTodoDto): Promise<Todo> {
+  // Todo 생성
+  async create(
+    createTodoDto: CreateTodoDto,
+  ): Promise<{ success: boolean; data: Todo }> {
     const todo = this.todoRepository.create(createTodoDto);
-    return await this.todoRepository.save(todo);
+    const savedTodo = await this.todoRepository.save(todo);
+    return { success: true, data: savedTodo };
   }
 
-  // Todo 항목 조회 (ID로 조회)
-  async findOne(id: string): Promise<Todo> {
-    return await this.todoRepository.findOne({ where: { id } });
+  // Todo ID 조회
+  async findOne(id: string): Promise<{ success: boolean; data: Todo }> {
+    const todo = await this.todoRepository.findOne({ where: { id } });
+    // Todo 존재 하지 않으면 에러처리
+    if (!todo) {
+      throw new NotFoundException('TODO가 존재하지 않습니다.');
+    }
+    return { success: true, data: todo };
   }
 
-  // Todo 항목 조회 (상태로 조회)
-  async findAll(status: 'IN PROCESS' | 'DONE' | 'IDLE'): Promise<Todo[]> {
-    return await this.todoRepository.find({ where: { status } });
+  // Todo 상태 전체 조회
+  async findAll(
+    status: 'IN PROCESS' | 'DONE' | 'IDLE',
+  ): Promise<{ success: boolean; data: Todo[] }> {
+    const todos = await this.todoRepository.find({ where: { status } });
+    return { success: true, data: todos };
   }
 
-  // Todo 항목 업데이트
-  async update(id: string, updateTodoDto: UpdateTodoDto): Promise<Todo> {
+  // Todo 수정
+  async update(
+    id: string,
+    updateTodoDto: UpdateTodoDto,
+  ): Promise<{ success: boolean; data: Todo }> {
     const todo = await this.findOne(id);
-    Object.assign(todo, updateTodoDto);
-    return await this.todoRepository.save(todo);
+    // 전 todo를 새로 덮어 씌움
+    Object.assign(todo.data, updateTodoDto);
+    const updatedTodo = await this.todoRepository.save(todo.data);
+    return { success: true, data: updatedTodo };
   }
 
-  // Todo 항목 삭제
-  async delete(id: string): Promise<void> {
+  // Todo 삭제
+  async delete(id: string): Promise<{ success: boolean }> {
+    const todo = await this.findOne(id);
+    // Todo 존재 하지 않으면 에러처리
+    if (!todo) {
+      throw new NotFoundException('TODO가 존재하지 않습니다.');
+    }
     await this.todoRepository.delete(id);
+
+    return { success: true };
   }
 }

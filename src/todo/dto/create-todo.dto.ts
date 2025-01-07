@@ -1,20 +1,38 @@
-import { IsString, IsEnum, IsOptional, IsDateString } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsOptional,
+  IsDateString,
+  Length,
+} from 'class-validator';
 
 export class CreateTodoDto {
   @IsString()
-  name: string;
+  @Length(4, 36)
+  id: string;
 
   @IsString()
-  @IsOptional()
-  description: string;
+  @Length(4, 36)
+  name: string;
 
   @IsOptional()
-  @IsDateString()
-  startDateAt?: Date;
+  @IsString()
+  description: string = '';
 
-  @IsOptional()
   @IsDateString()
-  dueDateAt?: Date;
+  createdAt: string;
+
+  @IsDateString()
+  @IsOptional()
+  updatedAt: string | null = null;
+
+  @IsDateString()
+  @IsOptional()
+  startDateAt: string | null = null;
+
+  @IsDateString()
+  @IsOptional()
+  dueDateAt: string | null = null;
 
   @IsEnum(['IN PROCESS', 'DONE', 'IDLE'])
   status: 'IN PROCESS' | 'DONE' | 'IDLE';

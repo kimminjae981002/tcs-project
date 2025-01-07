@@ -1,23 +1,34 @@
-import { IsString, IsEnum, IsOptional, IsDateString } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsEnum,
+  IsDateString,
+  Length,
+} from 'class-validator';
 
 export class UpdateTodoDto {
-  @IsString()
   @IsOptional()
-  name?: string;
+  @IsString()
+  @Length(4, 36)
+  name: string;
 
-  @IsString()
   @IsOptional()
-  description?: string;
+  @IsString()
+  description: string;
 
   @IsOptional()
   @IsDateString()
-  startDateAt?: Date;
+  updatedAt: string | null;
 
   @IsOptional()
   @IsDateString()
-  dueDateAt?: Date;
+  startDateAt: string | null;
 
+  @IsOptional()
+  @IsDateString()
+  dueDateAt: string | null;
+
+  @IsOptional()
   @IsEnum(['IN PROCESS', 'DONE', 'IDLE'])
-  @IsOptional()
-  status?: 'IN PROCESS' | 'DONE' | 'IDLE';
+  status: 'IN PROCESS' | 'DONE' | 'IDLE';
 }
