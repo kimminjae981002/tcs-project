@@ -36,6 +36,9 @@ export class TodoService {
     status: 'IN PROCESS' | 'DONE' | 'IDLE',
   ): Promise<{ success: boolean; data: Todo[] }> {
     const todos = await this.todoRepository.find({ where: { status } });
+    if (todos.length === 0) {
+      throw new NotFoundException('TODO가 존재하지 않습니다.');
+    }
     return { success: true, data: todos };
   }
 

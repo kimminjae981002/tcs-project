@@ -8,7 +8,8 @@ export const typeOrmModuleAsyncOptions: TypeOrmModuleAsyncOptions = {
   inject: [ConfigService],
   useFactory: async (configService: ConfigService) => ({
     type: 'postgres',
-    host: configService.get<string>('DB_HOST'),
+    host: 'localhost',
+    // host 문제인가? local은 잘 된다..
     port: configService.get<number>('DB_PORT'),
     username: configService.get<string>('DB_USERNAME'),
     password: configService.get<string>('DB_PASSWORD'),
@@ -17,5 +18,6 @@ export const typeOrmModuleAsyncOptions: TypeOrmModuleAsyncOptions = {
     autoLoadEntities: true,
     entities: [Todo],
     logging: true,
+    synchronize: true,
   }),
 };
