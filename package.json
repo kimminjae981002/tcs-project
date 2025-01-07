@@ -23,7 +23,10 @@
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
+<<<<<<< HEAD
     "@nestjs/swagger": "^8.1.0",
+=======
+>>>>>>> 2486ee6932599d15b3221525b577d17c7a8c6d52
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },
