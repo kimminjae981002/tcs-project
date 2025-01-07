@@ -1,73 +1,62 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# TODO List API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 설명
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- 간단한 TODO 리스트 CRUD API 구현입니다.
 
-## Description
+### 환경변수
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=your_db_username
+DB_PASSWORD=your_db_password
+DB_DATABASE=your_db_name
 
-## Installation
+### 사용방법
 
-```bash
-$ npm install
-```
+- npm run start:dev 서버 열기
+- http://localhost:포트/api-docs 스웨거로 이용하기
 
-## Running the app
+- 기술 스택 -
+  NestJS / TypeORM / PostgreSQL
 
-```bash
-# development
-$ npm run start
+## API 설명
 
-# watch mode
-$ npm run start:dev
+### 1. CREATE TODO
 
-# production mode
-$ npm run start:prod
-```
+- **URL**: '/todos'
+- **메소드**: 'POST'
+- **설명**: 제목과, 내용과, 각 날짜를 선택, 진행 상태 여부도 체크 후 생성 가능
 
-## Test
+### 2. SELECT ONE TODO
 
-```bash
-# unit tests
-$ npm run test
+- **URL**: '/todos/:id'
+- **메소드**: 'GET'
+- **설명**: TODO ID를 이용해 TODO 조회 가능, 조회 안 될 시 404 에러 처리
 
-# e2e tests
-$ npm run test:e2e
+### 3. SELECT ALL STATUS TODO
 
-# test coverage
-$ npm run test:cov
-```
+- **URL**: '/todos'
+- **메소드**: 'POST'
+- **설명**: TODO STATUS를 이용해 STATUS에 맞는 전체 TODO LIST 조회 가능
 
-## Support
+### 4. UPDATE TODO
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- **URL**: '/todos/:id'
+- **메소드**: 'PUT'
+- **설명**: TODO ID를 이용해 TODO 수정 가능, 조회 안 될 시 404 에러 처리
 
-## Stay in touch
+### 5. CREATE TODO
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **URL**: '/todos/:id'
+- **메소드**: 'DELETE'
+- **설명**: TODO ID를 이용해 TODO 삭제 가능, 조회 안 될 시 404 에러 처리
 
-## License
+#### 아쉬운 점
 
-Nest is [MIT licensed](LICENSE).
+- postgreSQL 연결을 하려 했지만 실패
+  실패 경험(5432 방화벽, pg_hba IP 설정, RDS 보안그룹 인바운드 규칙 수정, 파라미터 SSL 수정, 버전 다운그레이드) 많은 것들을
+  해봤지만 잡히지를 않았음
+  에러 내용: no pg_hba.conf entry for host no encryption
+  postgres는 pg_hba.conf를 통해 IP 설정이 가능한데, 모두 공개로 해도 안됨.
+  희안하게 DB는 연결이 잘 됨.
